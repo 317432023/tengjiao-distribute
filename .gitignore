@@ -58,5 +58,3 @@ nbdist/
 
 #vue-cli模板项目需要此build目录
 #build/
-
-static/
