@@ -26,9 +26,9 @@ public interface RegistryDao {
 
     public Registry loadById(@Param("id") int id);
 
-    public int add(@Param("xxlRpcRegistry") Registry xxlRpcRegistry);
+    public int add(@Param("registry") Registry registry);
 
-    public int update(@Param("xxlRpcRegistry") Registry xxlRpcRegistry);
+    public int update(@Param("registry") Registry registry);
 
     public int delete(@Param("id") int id);
 

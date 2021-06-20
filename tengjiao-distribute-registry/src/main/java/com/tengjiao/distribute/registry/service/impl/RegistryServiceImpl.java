@@ -391,7 +391,7 @@ public class RegistryServiceImpl implements RegistryService, InitializingBean, D
 
         // valid
         if (registryDataFilePath==null || registryDataFilePath.trim().length()==0) {
-            throw new RuntimeException("xxl-rpc, registryDataFilePath empty.");
+            throw new RuntimeException("registryDataFilePath empty.");
         }
 
         /**
@@ -689,7 +689,7 @@ public class RegistryServiceImpl implements RegistryService, InitializingBean, D
 
         PropUtil.writeProp(prop, fileName);
 
-        logger.info(">>>>>>>>>>> xxl-rpc, setFileRegistryData: biz={}, env={}, key={}, data={}"
+        logger.info(">>>>>>>>>>>  setFileRegistryData: biz={}, env={}, key={}, data={}"
                 , registry.getBiz(), registry.getEnv(), registry.getKey(), registry.getData());
 
 
@@ -718,7 +718,7 @@ public class RegistryServiceImpl implements RegistryService, InitializingBean, D
             if (childFile.isFile() && !registryDataFileList.contains(childFile.getPath())) {
                 childFile.delete();
 
-                logger.info(">>>>>>>>>>> xxl-rpc, cleanFileRegistryData, RegistryData Path={}", childFile.getPath());
+                logger.info(">>>>>>>>>>>  cleanFileRegistryData, RegistryData Path={}", childFile.getPath());
             }
             if (childFile.isDirectory()) {
                 if (parentPath.listFiles()!=null && parentPath.listFiles().length>0) {

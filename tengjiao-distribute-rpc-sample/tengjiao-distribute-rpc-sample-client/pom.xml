@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>tengjiao-distribute-rpc-sample</artifactId>
+        <groupId>com.tengjiao</groupId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>tengjiao-distribute-rpc-sample-client</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+
+    <dependencies>
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+
+        <!-- rpc -->
+        <dependency>
+            <groupId>com.tengjiao</groupId>
+            <artifactId>tengjiao-distribute-rpc</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!-- sample-api -->
+        <dependency>
+            <groupId>com.tengjiao</groupId>
+            <artifactId>tengjiao-distribute-rpc-sample-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

@@ -15,7 +15,8 @@
 
     <modules>
         <module>tengjiao-distribute-registry</module>
-        <module>tengjiao-distribute-core</module>
+        <module>tengjiao-distribute-rpc</module>
+        <module>tengjiao-distribute-rpc-sample</module>
     </modules>
 
     <properties>

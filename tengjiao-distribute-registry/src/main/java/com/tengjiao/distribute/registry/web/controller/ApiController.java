@@ -1,7 +1,7 @@
 package com.tengjiao.distribute.registry.web.controller;
 
-import com.tengjiao.distribute.core.registry.model.RegistryDataParamVO;
-import com.tengjiao.distribute.core.registry.model.RegistryParamVO;
+import com.tengjiao.distribute.rpc.registry.model.RegistryDataParamVO;
+import com.tengjiao.distribute.rpc.registry.model.RegistryParamVO;
 import com.tengjiao.distribute.registry.model.RegistryData;
 import com.tengjiao.distribute.registry.web.annotation.PermessionLimit;
 import com.tengjiao.distribute.registry.result.ReturnT;
