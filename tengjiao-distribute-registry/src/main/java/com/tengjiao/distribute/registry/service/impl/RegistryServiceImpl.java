@@ -438,7 +438,7 @@ public class RegistryServiceImpl implements RegistryService, InitializingBean, D
         }
 
         /**
-         * remove registry data         (client-num/start-interval s)
+         * remove registry data         (client-num/start-retryRegAndMonInterval s)
          */
         for (int i = 0; i < 10; i++) {
             executorService.execute(new Runnable() {

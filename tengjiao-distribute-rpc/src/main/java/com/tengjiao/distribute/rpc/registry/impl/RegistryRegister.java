@@ -16,6 +16,7 @@ public class RegistryRegister extends Register {
             ACCESS_TOKEN = "ACCESS_TOKEN",
             BIZ = "BIZ",
             ENV = "ENV";
+    public static final String IS_PROVIDER = "IS_PROVIDER";
 
     private RegistryClient registryClient;
     public RegistryClient getRegistryClient() {
@@ -33,7 +34,8 @@ public class RegistryRegister extends Register {
         biz = (biz!=null&&biz.trim().length()>0)?biz:"default";
         env = (env!=null&&env.trim().length()>0)?env:"default";
 
-        registryClient = new RegistryClient(registryAddress, accessToken, biz, env);
+        boolean isProvider = "false".equalsIgnoreCase(param.get(IS_PROVIDER))?false:true;
+        registryClient = new RegistryClient(registryAddress, accessToken, biz, env, isProvider);
 
     }
 

@@ -122,13 +122,13 @@ public class RpcReferenceBean {
 		if (this.serializer == null) {
 			throw new RpcException("reference serializer missing.");
 		}
-		if (this.callType==null) {
+		if (this.callType == null) {
 			throw new RpcException("reference callType missing.");
 		}
-		if (this.loadBalance==null) {
+		if (this.loadBalance == null) {
 			throw new RpcException("reference loadBalance missing.");
 		}
-		if (this.iface==null) {
+		if (this.iface == null) {
 			throw new RpcException("reference iface missing.");
 		}
 		if (this.timeout < 0) {

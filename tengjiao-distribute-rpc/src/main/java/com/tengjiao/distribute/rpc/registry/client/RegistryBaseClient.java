@@ -17,6 +17,15 @@ import java.util.*;
 public class RegistryBaseClient {
     private static Logger logger = LoggerFactory.getLogger(RegistryBaseClient.class);
 
+    public static final int
+        /** 服务注册，5秒超时 */
+        RegistryTimeout = 5,
+        /** 服务查找，5秒超时 */
+        DiscoveryTimeout = 5,
+        /** 服务摘除，5秒超时 */
+        RemoveTimeout = 5,
+        /** 服务监视，60秒超时 */
+        MonitorTimeout = 60;
 
     private String adminAddress;
     private String accessToken;
@@ -87,7 +96,7 @@ public class RegistryBaseClient {
         String paramsJson = BasicJsonTool.toJson(registryParamVO);
 
         // result
-        Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, 5);
+        Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, RegistryTimeout);
         return respObj!=null?true:false;
     }
 
@@ -102,23 +111,23 @@ public class RegistryBaseClient {
                 return null;
             }
 
-            // parse resopnse
-            Map<String, Object> resopnseMap = null;
+            // parse response
+            Map<String, Object> responseMap = null;
             try {
-                resopnseMap = BasicJsonTool.parseMap(responseData);
+                responseMap = BasicJsonTool.parseMap(responseData);
             } catch (Exception e) { }
 
 
             // valid resopnse
-            if (resopnseMap==null
-                    || !resopnseMap.containsKey("code")
-                    || !"200".equals(String.valueOf(resopnseMap.get("code")))
+            if (responseMap==null
+                    || !responseMap.containsKey("code")
+                    || !"200".equals(String.valueOf(responseMap.get("code")))
                     ) {
                 logger.warn("RegistryBaseClient response fail, responseData={}", responseData);
                 return null;
             }
 
-            return resopnseMap;
+            return responseMap;
         }
 
 
@@ -158,7 +167,7 @@ public class RegistryBaseClient {
         String paramsJson = BasicJsonTool.toJson(registryParamVO);
 
         // result
-        Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, 5);
+        Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, RemoveTimeout);
         return respObj!=null?true:false;
     }
 
@@ -187,7 +196,7 @@ public class RegistryBaseClient {
         String paramsJson = BasicJsonTool.toJson(registryParamVO);
 
         // result
-        Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, 5);
+        Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, DiscoveryTimeout);
 
         // parse
         if (respObj!=null && respObj.containsKey("data")) {
@@ -223,7 +232,7 @@ public class RegistryBaseClient {
         String paramsJson = BasicJsonTool.toJson(registryParamVO);
 
         // result
-        Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, 60);
+        Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, MonitorTimeout);
         return respObj!=null?true:false;
     }
 

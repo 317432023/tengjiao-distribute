@@ -16,54 +16,65 @@ import java.util.concurrent.TimeUnit;
 public class RegistryClient {
     private static Logger logger = LoggerFactory.getLogger(RegistryClient.class);
 
+    public static final int
+        /** 刷新注册与监视间隔 10 秒 */
+        RefreshRegAndMonInterval = 10,
+        /** 重试查找间隔 3 秒 */
+        RetryDiscoveryInterval = 3;
+
     /** 本地缓存 */
     private volatile Set<RegistryDataParamVO> registryData = new HashSet<>();
     /** 远程查找的结果 缓存 */
     private volatile ConcurrentMap<String, TreeSet<String>> discoveryData = new ConcurrentHashMap<>();
 
-    /** 注册线程，每隔一段时间间隔(10ms)读取本地缓存，向注册中心发起一次注册 */
+    /** 注册线程，每隔一段时间间隔(见RefreshRegAndMonInterval)读取本地缓存，向注册中心发起一次注册 */
     private Thread registryThread;
-    /** 监视线程，每个一段时间间隔(10ms)向注册中心发起一次监视，若有成功响应说明远程数据有变化，立即发起discovery查找，然后更新远程查找的结果 缓存 */
+    /** 监视线程，每个一段时间间隔(见RetryDiscoveryInterval)向注册中心发起一次监视，若有成功响应说明远程数据有变化，立即发起discovery查找，然后更新远程查找的结果 缓存 */
     private Thread discoveryThread;
     private volatile boolean registryThreadStop = false;
 
 
     private RegistryBaseClient registryBaseClient;
-
     public RegistryClient(String adminAddress, String accessToken, String biz, String env) {
+        this(adminAddress, accessToken, biz, env, true);
+    }
+    public RegistryClient(String adminAddress, String accessToken, String biz, String env, boolean isProvider) {
         registryBaseClient = new RegistryBaseClient(adminAddress, accessToken, biz, env);
         logger.info(">>>>>>>>>>> RegistryClient init .... [adminAddress={}, accessToken={}, biz={}, env={}]", adminAddress, accessToken, biz, env);
 
-        // registry thread
-        registryThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (!registryThreadStop) {
-                    try {
-                        if (registryData.size() > 0) {
+        if(isProvider) {
 
-                            boolean ret = registryBaseClient.registry(new ArrayList<RegistryDataParamVO>(registryData));
-                            logger.debug(">>>>>>>>>>> refresh registry data {}, registryData = {}", ret?"success":"fail",registryData);
+            // registry thread
+            registryThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (!registryThreadStop) {
+                        try {
+                            if (registryData.size() > 0) {
+
+                                boolean ret = registryBaseClient.registry(new ArrayList<RegistryDataParamVO>(registryData));
+                                logger.debug(">>>>>>>>>>> refresh registry data {}, registryData = {}", ret ? "success" : "fail", registryData);
+                            }
+                        } catch (Exception e) {
+                            if (!registryThreadStop) {
+                                logger.error(">>>>>>>>>>> registryThread error.", e);
+                            }
                         }
-                    } catch (Exception e) {
-                        if (!registryThreadStop) {
-                            logger.error(">>>>>>>>>>> registryThread error.", e);
+                        try {
+                            TimeUnit.SECONDS.sleep(RefreshRegAndMonInterval);
+                        } catch (Exception e) {
+                            if (!registryThreadStop) {
+                                logger.error(">>>>>>>>>>> registryThread error.", e);
+                            }
                         }
                     }
-                    try {
-                        TimeUnit.SECONDS.sleep(10);
-                    } catch (Exception e) {
-                        if (!registryThreadStop) {
-                            logger.error(">>>>>>>>>>> registryThread error.", e);
-                        }
-                    }
+                    logger.info(">>>>>>>>>>> registryThread stoped.");
                 }
-                logger.info(">>>>>>>>>>> registryThread stoped.");
-            }
-        });
-        registryThread.setName("RegistryClient registryThread.");
-        registryThread.setDaemon(true);
-        registryThread.start();
+            });
+            registryThread.setName("RegistryClient registryThread.");
+            registryThread.setDaemon(true);
+            registryThread.start();
+        }
 
         // discovery thread
         discoveryThread = new Thread(new Runnable() {
@@ -73,7 +84,7 @@ public class RegistryClient {
 
                     if (discoveryData.size() == 0) {
                         try {
-                            TimeUnit.SECONDS.sleep(3);
+                            TimeUnit.SECONDS.sleep(RetryDiscoveryInterval);
                         } catch (Exception e) {
                             if (!registryThreadStop) {
                                 logger.error(">>>>>>>>>>> discoveryThread error.", e);
@@ -86,7 +97,7 @@ public class RegistryClient {
 
                             // avoid fail-retry request too quick
                             if (!monitorRet){
-                                TimeUnit.SECONDS.sleep(10);
+                                TimeUnit.SECONDS.sleep(RefreshRegAndMonInterval);
                             }
 
                             // refreshDiscoveryData, all

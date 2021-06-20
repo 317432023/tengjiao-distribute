@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author
  */
-public class RpcClientAplication {
+public class RpcClientApplication {
 
 	public static void main(String[] args) throws Exception {
 
@@ -33,7 +33,7 @@ public class RpcClientAplication {
 
 		TimeUnit.SECONDS.sleep(2);
 
-		// stop client invoker factory (default by getInstance, exist inner thread, need destory)
+		// stop client invoker factory (default by getInstance, exist inner thread, need destroy)
 		RpcInvoker.getInstance().stop();
 
 	}

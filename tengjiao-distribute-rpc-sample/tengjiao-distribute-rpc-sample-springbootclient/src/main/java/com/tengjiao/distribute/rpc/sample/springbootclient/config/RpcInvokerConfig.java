@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 
 /**
- * xxl-rpc invoker config
+ * invoker config
  *
  * @author
  */
@@ -35,6 +35,8 @@ public class RpcInvokerConfig {
         rpcSpringInvoker.setServiceRegistryParam(new HashMap<String, String>(){{
             put(RegistryRegister.ADMIN_ADDRESS, address);
             put(RegistryRegister.ENV, env);
+            // 默认"true"
+            put(RegistryRegister.IS_PROVIDER, "false");
         }});
 
         logger.info(">>>>>>>>>>> invoker config init finish.");
